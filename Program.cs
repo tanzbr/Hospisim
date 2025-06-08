@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
+using Hospisim.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
