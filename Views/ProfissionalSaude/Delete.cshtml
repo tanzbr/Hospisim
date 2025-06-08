@@ -1,0 +1,173 @@
+@model Hospisim.Domain.Entities.ProfissionalSaude
+
+@{
+    ViewData["Title"] = "Excluir Profissional";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-0">
+            <i class="fas fa-trash text-danger me-2"></i>Excluir Profissional
+        </h1>
+        <p class="text-muted mb-0">Confirmar exclusão do profissional de saúde</p>
+    </div>
+    <div>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Voltar
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="m-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Confirmar Exclusão
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Atenção!</strong> Esta ação não pode ser desfeita. Tem certeza que deseja excluir este profissional?
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-4">Nome:</dt>
+                            <dd class="col-sm-8"><strong>@Model.NomeCompleto</strong></dd>
+                            
+                            <dt class="col-sm-4">CPF:</dt>
+                            <dd class="col-sm-8">@Model.CPF</dd>
+                            
+                            <dt class="col-sm-4">E-mail:</dt>
+                            <dd class="col-sm-8">@Model.Email</dd>
+                            
+                            <dt class="col-sm-4">Especialidade:</dt>
+                            <dd class="col-sm-8">
+                                <span class="badge bg-info">@Model.Especialidade?.Nome</span>
+                            </dd>
+                        </dl>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-5">Registro:</dt>
+                            <dd class="col-sm-7">
+                                <strong>@Model.RegistroConselho</strong>
+                                <br>
+                                <small class="text-muted">@Model.TipoRegistro</small>
+                            </dd>
+                            
+                            <dt class="col-sm-5">Atendimentos:</dt>
+                            <dd class="col-sm-7">
+                                <span class="badge bg-warning">
+                                    @Model.Atendimentos.Count() atendimentos
+                                </span>
+                            </dd>
+                            
+                            <dt class="col-sm-5">Status:</dt>
+                            <dd class="col-sm-7">
+                                @if (Model.Ativo)
+                                {
+                                    <span class="badge bg-success">Ativo</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Inativo</span>
+                                }
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+
+                @if (Model.Atendimentos.Any())
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-ban me-2"></i>
+                        <strong>Não é possível excluir!</strong> Este profissional possui atendimentos registrados. 
+                        Para manter a integridade dos dados, considere desativar o profissional ao invés de excluí-lo.
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Voltar
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-warning">
+                            <i class="fas fa-edit me-1"></i>Desativar Profissional
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-1"></i>Sim, Excluir
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-times me-1"></i>Cancelar
+                            </a>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-info-circle me-1"></i>Informações Importantes
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                    <strong>Exclusão Permanente</strong>
+                    <p class="text-muted mb-0 mt-1">Esta ação não pode ser desfeita.</p>
+                </div>
+                
+                <div class="mb-3">
+                    <i class="fas fa-clipboard-list text-info me-2"></i>
+                    <strong>Atendimentos</strong>
+                    <p class="text-muted mb-0 mt-1">Profissionais com atendimentos não podem ser excluídos.</p>
+                </div>
+                
+                <div class="mb-3">
+                    <i class="fas fa-user-slash text-danger me-2"></i>
+                    <strong>Alternativa</strong>
+                    <p class="text-muted mb-0 mt-1">Considere desativar ao invés de excluir.</p>
+                </div>
+                
+                <div class="mb-0">
+                    <i class="fas fa-chart-bar text-success me-2"></i>
+                    <strong>Relatórios</strong>
+                    <p class="text-muted mb-0 mt-1">Dados históricos podem ser afetados.</p>
+                </div>
+            </div>
+        </div>
+        
+        @if (Model.Atendimentos.Any())
+        {
+            <div class="card shadow mt-3">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-warning">
+                        <i class="fas fa-exclamation-triangle me-1"></i>Atendimentos Vinculados
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-2">Este profissional possui:</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>@Model.Atendimentos.Count(a => a.Status == Hospisim.Domain.Enums.StatusAtendimento.Realizado) atendimentos realizados</li>
+                        <li><i class="fas fa-clock text-primary me-2"></i>@Model.Atendimentos.Count(a => a.Status == Hospisim.Domain.Enums.StatusAtendimento.EmAndamento) em andamento</li>
+                        <li><i class="fas fa-times text-secondary me-2"></i>@Model.Atendimentos.Count(a => a.Status == Hospisim.Domain.Enums.StatusAtendimento.Cancelado) cancelados</li>
+                    </ul>
+                </div>
+            </div>
+        }
+    </div>
+</div> 

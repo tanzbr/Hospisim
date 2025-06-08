@@ -1,0 +1,207 @@
+@model Hospisim.Domain.Entities.ProfissionalSaude
+
+@{
+    ViewData["Title"] = "Detalhes do Profissional";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-0">
+            <i class="fas fa-eye text-info me-2"></i>Detalhes do Profissional
+        </h1>
+        <p class="text-muted mb-0">Informações completas do profissional de saúde</p>
+    </div>
+    <div>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Voltar
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header">
+                <h5 class="m-0">
+                    <i class="fas fa-user-md me-2"></i>@Model.NomeCompleto
+                    @if (Model.Ativo)
+                    {
+                        <span class="badge bg-success ms-2">Ativo</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger ms-2">Inativo</span>
+                    }
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-4">Nome:</dt>
+                            <dd class="col-sm-8"><strong>@Model.NomeCompleto</strong></dd>
+                            
+                            <dt class="col-sm-4">CPF:</dt>
+                            <dd class="col-sm-8">@Model.CPF</dd>
+                            
+                            <dt class="col-sm-4">E-mail:</dt>
+                            <dd class="col-sm-8">
+                                <a href="mailto:@Model.Email">@Model.Email</a>
+                            </dd>
+                            
+                            <dt class="col-sm-4">Telefone:</dt>
+                            <dd class="col-sm-8">@Model.Telefone</dd>
+                            
+                            <dt class="col-sm-4">Especialidade:</dt>
+                            <dd class="col-sm-8">
+                                <span class="badge bg-info">@Model.Especialidade?.Nome</span>
+                            </dd>
+                        </dl>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-5">Registro:</dt>
+                            <dd class="col-sm-7">
+                                <strong>@Model.RegistroConselho</strong>
+                                <br>
+                                <small class="text-muted">@Model.TipoRegistro</small>
+                            </dd>
+                            
+                            <dt class="col-sm-5">Admissão:</dt>
+                            <dd class="col-sm-7">@Model.DataAdmissao.ToString("dd/MM/yyyy")</dd>
+                            
+                            <dt class="col-sm-5">Carga Horária:</dt>
+                            <dd class="col-sm-7">@Model.CargaHorariaSemanal horas/semana</dd>
+                            
+                            <dt class="col-sm-5">Turno:</dt>
+                            <dd class="col-sm-7">
+                                <span class="badge bg-secondary">@Model.Turno</span>
+                            </dd>
+                            
+                            <dt class="col-sm-5">Status:</dt>
+                            <dd class="col-sm-7">
+                                @if (Model.Ativo)
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-check me-1"></i>Ativo
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">
+                                        <i class="fas fa-times me-1"></i>Inativo
+                                    </span>
+                                }
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-4">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                        <i class="fas fa-edit me-1"></i>Editar
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger">
+                        <i class="fas fa-trash me-1"></i>Excluir
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-clipboard-list me-1"></i>Atendimentos Recentes
+                </h6>
+            </div>
+            <div class="card-body">
+                @if (Model.Atendimentos.Any())
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var atendimento in Model.Atendimentos.OrderByDescending(a => a.DataHora).Take(5))
+                        {
+                            <div class="list-group-item px-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">@atendimento.Paciente?.NomeCompleto</h6>
+                                        <small class="text-muted">
+                                            @atendimento.DataHora.ToString("dd/MM/yyyy HH:mm")
+                                        </small>
+                                    </div>
+                                    @switch (atendimento.Status)
+                                    {
+                                        case Hospisim.Domain.Enums.StatusAtendimento.Realizado:
+                                            <span class="badge bg-success">Realizado</span>
+                                            break;
+                                        case Hospisim.Domain.Enums.StatusAtendimento.EmAndamento:
+                                            <span class="badge bg-primary">Em Andamento</span>
+                                            break;
+                                        case Hospisim.Domain.Enums.StatusAtendimento.Cancelado:
+                                            <span class="badge bg-secondary">Cancelado</span>
+                                            break;
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    
+                    @if (Model.Atendimentos.Count() > 5)
+                    {
+                        <div class="text-center mt-3">
+                            <small class="text-muted">
+                                E mais @(Model.Atendimentos.Count() - 5) atendimentos...
+                            </small>
+                        </div>
+                    }
+                    
+                    <div class="text-center mt-3">
+                        <a asp-controller="Atendimento" asp-action="Index" class="btn btn-outline-primary btn-sm">
+                            Ver Todos os Atendimentos
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-3">
+                        <i class="fas fa-clipboard-list fa-2x text-muted mb-2"></i>
+                        <p class="text-muted mb-0">Nenhum atendimento registrado.</p>
+                    </div>
+                }
+            </div>
+        </div>
+        
+        <div class="card shadow mt-3">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-chart-bar me-1"></i>Estatísticas
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <div class="border-end">
+                            <h4 class="text-primary">@Model.Atendimentos.Count()</h4>
+                            <small class="text-muted">Total de Atendimentos</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <h4 class="text-success">@Model.Atendimentos.Count(a => a.Status == Hospisim.Domain.Enums.StatusAtendimento.Realizado)</h4>
+                        <small class="text-muted">Realizados</small>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <div class="text-center">
+                    <small class="text-muted">
+                        <i class="fas fa-calendar me-1"></i>
+                        Tempo no hospital: @((DateTime.Now - Model.DataAdmissao).Days) dias
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
