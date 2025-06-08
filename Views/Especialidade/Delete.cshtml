@@ -1,0 +1,112 @@
+@model Hospisim.Domain.Entities.Especialidade
+
+@{
+    ViewData["Title"] = "Excluir Especialidade";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-0">
+            <i class="fas fa-trash text-danger me-2"></i>Excluir Especialidade
+        </h1>
+        <p class="text-muted mb-0">Confirmar exclusão da especialidade médica</p>
+    </div>
+    <div>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Voltar
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="m-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Confirmar Exclusão
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Atenção!</strong> Esta ação não pode ser desfeita. Tem certeza que deseja excluir esta especialidade?
+                </div>
+
+                <dl class="row">
+                    <dt class="col-sm-3">Nome:</dt>
+                    <dd class="col-sm-9">
+                        <strong>@Model.Nome</strong>
+                    </dd>
+                    
+                    <dt class="col-sm-3">Profissionais:</dt>
+                    <dd class="col-sm-9">
+                        <span class="badge bg-info">
+                            @Model.Profissionais.Count() profissionais associados
+                        </span>
+                    </dd>
+                </dl>
+
+                @if (Model.Profissionais.Any())
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-ban me-2"></i>
+                        <strong>Não é possível excluir!</strong> Esta especialidade possui profissionais associados. 
+                        Remova ou reatribua os profissionais antes de excluir a especialidade.
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Voltar
+                        </a>
+                        <a asp-controller="ProfissionalSaude" asp-action="Index" class="btn btn-outline-primary">
+                            <i class="fas fa-users me-1"></i>Gerenciar Profissionais
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-1"></i>Sim, Excluir
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-times me-1"></i>Cancelar
+                            </a>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-info-circle me-1"></i>Informações Importantes
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                    <strong>Exclusão Permanente</strong>
+                    <p class="text-muted mb-0 mt-1">Esta ação não pode ser desfeita.</p>
+                </div>
+                
+                <div class="mb-3">
+                    <i class="fas fa-users text-info me-2"></i>
+                    <strong>Profissionais Associados</strong>
+                    <p class="text-muted mb-0 mt-1">Especialidades com profissionais não podem ser excluídas.</p>
+                </div>
+                
+                <div class="mb-0">
+                    <i class="fas fa-chart-bar text-success me-2"></i>
+                    <strong>Relatórios</strong>
+                    <p class="text-muted mb-0 mt-1">Dados históricos podem ser afetados.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
