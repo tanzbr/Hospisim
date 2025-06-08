@@ -1,0 +1,222 @@
+@model Hospisim.Domain.Entities.AltaHospitalar
+
+@{
+    ViewData["Title"] = "Detalhes da Alta Hospitalar";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-0">
+            <i class="fas fa-sign-out-alt text-success me-2"></i>Detalhes da Alta Hospitalar
+        </h1>
+        <p class="text-muted mb-0">Informações completas da alta hospitalar</p>
+    </div>
+    <div>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Voltar
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>Informações da Alta
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-calendar-check me-1"></i>Data da Alta
+                        </label>
+                        <div class="form-control-plaintext">
+                            <strong>@Model.DataAlta.ToString("dd/MM/yyyy HH:mm")</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-heartbeat me-1"></i>Condição do Paciente
+                        </label>
+                        <div class="form-control-plaintext">
+                            @switch (Model.CondicaoPaciente)
+                            {
+                                case "Curado":
+                                    <span class="badge bg-success">Curado</span>
+                                    break;
+                                case "Melhorado":
+                                    <span class="badge bg-info">Melhorado</span>
+                                    break;
+                                case "Inalterado":
+                                    <span class="badge bg-warning">Inalterado</span>
+                                    break;
+                                case "Piorado":
+                                    <span class="badge bg-danger">Piorado</span>
+                                    break;
+                                case "Óbito":
+                                    <span class="badge bg-dark">Óbito</span>
+                                    break;
+                                default:
+                                    <span class="badge bg-secondary">@Model.CondicaoPaciente</span>
+                                    break;
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-muted">
+                        <i class="fas fa-clipboard-list me-1"></i>Instruções Pós-Alta
+                    </label>
+                    <div class="form-control-plaintext border rounded p-3 bg-light">
+                        @Model.InstrucoesPosAlta
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow mt-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-bed me-2"></i>Informações da Internação
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-user-injured me-1"></i>Paciente
+                        </label>
+                        <div class="form-control-plaintext">
+                            <strong>@Model.Internacao?.Paciente?.NomeCompleto</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-calendar-alt me-1"></i>Data de Entrada
+                        </label>
+                        <div class="form-control-plaintext">
+                            @Model.Internacao?.DataEntrada.ToString("dd/MM/yyyy HH:mm")
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-hospital me-1"></i>Setor
+                        </label>
+                        <div class="form-control-plaintext">
+                            <span class="badge bg-info">@Model.Internacao?.Setor</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-door-open me-1"></i>Quarto
+                        </label>
+                        <div class="form-control-plaintext">
+                            <strong>@Model.Internacao?.Quarto</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-bed me-1"></i>Leito
+                        </label>
+                        <div class="form-control-plaintext">
+                            <strong>@Model.Internacao?.Leito</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-muted">
+                        <i class="fas fa-notes-medical me-1"></i>Motivo da Internação
+                    </label>
+                    <div class="form-control-plaintext border rounded p-3 bg-light">
+                        @Model.Internacao?.MotivoInternacao
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <a asp-controller="Internacao" asp-action="Details" asp-route-id="@Model.InternacaoId" class="btn btn-outline-info btn-sm">
+                        <i class="fas fa-eye me-1"></i>Ver Detalhes da Internação
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-chart-bar me-1"></i>Estatísticas
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <i class="fas fa-clock text-primary me-2"></i>
+                    <strong>Tempo de Internação</strong>
+                    <p class="text-muted mb-0 mt-1">
+                        @{
+                            var tempoInternacao = Model.DataAlta - Model.Internacao?.DataEntrada;
+                            var dias = tempoInternacao?.Days ?? 0;
+                        }
+                        @dias dia(s)
+                    </p>
+                </div>
+                
+                <div class="mb-3">
+                    <i class="fas fa-calendar-alt text-info me-2"></i>
+                    <strong>Data de Entrada</strong>
+                    <p class="text-muted mb-0 mt-1">@Model.Internacao?.DataEntrada.ToString("dd/MM/yyyy")</p>
+                </div>
+                
+                <div class="mb-0">
+                    <i class="fas fa-sign-out-alt text-success me-2"></i>
+                    <strong>Data da Alta</strong>
+                    <p class="text-muted mb-0 mt-1">@Model.DataAlta.ToString("dd/MM/yyyy")</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow mt-3">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-cogs me-1"></i>Ações
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-warning btn-sm">
+                        <i class="fas fa-edit me-1"></i>Editar Alta
+                    </a>
+                    
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger btn-sm">
+                        <i class="fas fa-trash me-1"></i>Excluir Alta
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow mt-3">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-warning">
+                    <i class="fas fa-exclamation-triangle me-1"></i>Importante
+                </h6>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-0">
+                    <i class="fas fa-info-circle me-1"></i>
+                    A exclusão desta alta reverterá o status da internação para "Ativa".
+                </p>
+            </div>
+        </div>
+    </div>
+</div> 

@@ -1,0 +1,173 @@
+@model Hospisim.Domain.Entities.AltaHospitalar
+
+@{
+    ViewData["Title"] = "Editar Alta Hospitalar";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-0">
+            <i class="fas fa-edit text-warning me-2"></i>Editar Alta Hospitalar
+        </h1>
+        <p class="text-muted mb-0">Modifique as informações da alta hospitalar</p>
+    </div>
+    <div>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Voltar
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-sign-out-alt me-2"></i>Dados da Alta
+                </h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="InternacaoId" />
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="DataAlta" class="form-label">
+                                <i class="fas fa-calendar-check me-1"></i>Data da Alta
+                            </label>
+                            <input asp-for="DataAlta" class="form-control" type="datetime-local" />
+                            <span asp-validation-for="DataAlta" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="CondicaoPaciente" class="form-label">
+                                <i class="fas fa-heartbeat me-1"></i>Condição do Paciente
+                            </label>
+                            <select asp-for="CondicaoPaciente" class="form-select">
+                                <option value="">Selecione a condição</option>
+                                <option value="Curado">Curado</option>
+                                <option value="Melhorado">Melhorado</option>
+                                <option value="Inalterado">Inalterado</option>
+                                <option value="Piorado">Piorado</option>
+                                <option value="Óbito">Óbito</option>
+                            </select>
+                            <span asp-validation-for="CondicaoPaciente" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="InstrucoesPosAlta" class="form-label">
+                            <i class="fas fa-clipboard-list me-1"></i>Instruções Pós-Alta
+                        </label>
+                        <textarea asp-for="InstrucoesPosAlta" class="form-control" rows="5" 
+                                  placeholder="Descreva as instruções e cuidados que o paciente deve seguir após a alta..."></textarea>
+                        <span asp-validation-for="InstrucoesPosAlta" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-save me-1"></i>Salvar Alterações
+                        </button>
+                        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-info">
+                            <i class="fas fa-eye me-1"></i>Ver Detalhes
+                        </a>
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-1"></i>Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-bed me-1"></i>Internação Relacionada
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label text-muted">
+                        <i class="fas fa-user-injured me-1"></i>Paciente
+                    </label>
+                    <div class="form-control-plaintext">
+                        <strong>@Model.Internacao?.Paciente?.NomeCompleto</strong>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label text-muted">
+                        <i class="fas fa-calendar-alt me-1"></i>Data de Entrada
+                    </label>
+                    <div class="form-control-plaintext">
+                        @Model.Internacao?.DataEntrada.ToString("dd/MM/yyyy HH:mm")
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label text-muted">
+                        <i class="fas fa-map-marker-alt me-1"></i>Localização
+                    </label>
+                    <div class="form-control-plaintext">
+                        @Model.Internacao?.Setor - @Model.Internacao?.Quarto/@Model.Internacao?.Leito
+                    </div>
+                </div>
+                
+                <div class="d-grid">
+                    <a asp-controller="Internacao" asp-action="Details" asp-route-id="@Model.InternacaoId" class="btn btn-outline-info btn-sm">
+                        <i class="fas fa-eye me-1"></i>Ver Internação
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow mt-3">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-info">
+                    <i class="fas fa-lightbulb me-1"></i>Dicas
+                </h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        <small>Seja específico nas instruções pós-alta</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        <small>Inclua medicamentos e dosagens</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        <small>Mencione retornos necessários</small>
+                    </li>
+                    <li class="mb-0">
+                        <i class="fas fa-check-circle text-success me-2"></i>
+                        <small>Indique cuidados especiais</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card shadow mt-3">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-warning">
+                    <i class="fas fa-exclamation-triangle me-1"></i>Importante
+                </h6>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-0">
+                    <i class="fas fa-info-circle me-1"></i>
+                    As alterações na alta podem impactar relatórios e estatísticas do hospital.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

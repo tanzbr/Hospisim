@@ -1,0 +1,133 @@
+@model Hospisim.Domain.Entities.AltaHospitalar
+
+@{
+    ViewData["Title"] = "Nova Alta Hospitalar";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-0">
+            <i class="fas fa-sign-out-alt text-success me-2"></i>Nova Alta Hospitalar
+        </h1>
+        <p class="text-muted mb-0">Registrar alta hospitalar</p>
+    </div>
+    <div>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Voltar
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-body">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="InternacaoId" class="form-label">
+                            <i class="fas fa-bed me-1"></i>Internação
+                        </label>
+                        <select asp-for="InternacaoId" class="form-select" asp-items="ViewBag.InternacaoId">
+                            <option value="">Selecione uma internação ativa...</option>
+                        </select>
+                        <span asp-validation-for="InternacaoId" class="text-danger"></span>
+                        <div class="form-text">Apenas internações ativas são exibidas.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="DataAlta" class="form-label">
+                            <i class="fas fa-calendar-check me-1"></i>Data e Hora da Alta
+                        </label>
+                        <input asp-for="DataAlta" class="form-control" type="datetime-local" />
+                        <span asp-validation-for="DataAlta" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="CondicaoPaciente" class="form-label">
+                            <i class="fas fa-heartbeat me-1"></i>Condição do Paciente
+                        </label>
+                        <select asp-for="CondicaoPaciente" class="form-select">
+                            <option value="">Selecione...</option>
+                            <option value="Estável">Estável</option>
+                            <option value="Melhorado">Melhorado</option>
+                            <option value="Curado">Curado</option>
+                            <option value="A pedido">A pedido</option>
+                            <option value="Transferido">Transferido</option>
+                            <option value="Óbito">Óbito</option>
+                        </select>
+                        <span asp-validation-for="CondicaoPaciente" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="InstrucoesPosAlta" class="form-label">
+                            <i class="fas fa-clipboard-list me-1"></i>Instruções Pós-Alta
+                        </label>
+                        <textarea asp-for="InstrucoesPosAlta" class="form-control" rows="5" placeholder="Descreva as instruções para o paciente após a alta..."></textarea>
+                        <span asp-validation-for="InstrucoesPosAlta" class="text-danger"></span>
+                        <div class="form-text">Inclua medicações, cuidados especiais, retornos, etc.</div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save me-1"></i>Registrar Alta
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-1"></i>Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-info-circle me-1"></i>Informações
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                    <strong>Importante</strong>
+                    <p class="text-muted mb-0 mt-1">A alta hospitalar altera automaticamente o status da internação para "Alta Concedida".</p>
+                </div>
+                
+                <div class="mb-3">
+                    <i class="fas fa-clipboard-list text-info me-2"></i>
+                    <strong>Instruções</strong>
+                    <p class="text-muted mb-0 mt-1">Inclua todas as orientações necessárias para o paciente e familiares.</p>
+                </div>
+                
+                <div class="mb-0">
+                    <i class="fas fa-calendar-check text-success me-2"></i>
+                    <strong>Data e Hora</strong>
+                    <p class="text-muted mb-0 mt-1">Registre o momento exato da alta hospitalar.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow mt-3">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-heartbeat me-1"></i>Condições Comuns
+                </h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li><span class="badge bg-success me-2">Estável</span>Paciente em condições normais</li>
+                    <li><span class="badge bg-info me-2">Melhorado</span>Melhora significativa</li>
+                    <li><span class="badge bg-primary me-2">Curado</span>Recuperação completa</li>
+                    <li><span class="badge bg-warning me-2">A pedido</span>Alta solicitada pelo paciente</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

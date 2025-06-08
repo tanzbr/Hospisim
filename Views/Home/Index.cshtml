@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Hospisim.Models.DashboardViewModel
+@{
     ViewData["Title"] = "Dashboard";
 }
 
@@ -30,7 +31,7 @@
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                             Total de Pacientes
                         </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">1,234</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalPacientes</div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -48,7 +49,7 @@
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                             Atendimentos Hoje
                         </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">45</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.AtendimentosHoje</div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
@@ -66,7 +67,7 @@
                         <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                             Internações Ativas
                         </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.InternacoesAtivas</div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-bed fa-2x text-gray-300"></i>
@@ -84,10 +85,85 @@
                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                             Profissionais Ativos
                         </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">89</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.ProfissionaisAtivos</div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-user-md fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Segunda linha de estatísticas -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                            Altas Hoje
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.AltasHoje</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-sign-out-alt fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-secondary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+                            Total Atendimentos
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalAtendimentos</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-chart-line fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-dark shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                            Total Internações
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalInternacoes</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-hospital fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-light shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-muted text-uppercase mb-1">
+                            Total Altas
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalAltas</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-check-circle fa-2x text-gray-300"></i>
                     </div>
                 </div>
             </div>
@@ -106,28 +182,40 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
                         <a href="@Url.Action("Create", "Paciente")" class="btn btn-outline-primary btn-lg w-100 h-100 d-flex flex-column justify-content-center">
                             <i class="fas fa-user-plus fa-2x mb-2"></i>
                             <span>Novo Paciente</span>
                         </a>
                     </div>
-                    <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
                         <a href="@Url.Action("Create", "Atendimento")" class="btn btn-outline-success btn-lg w-100 h-100 d-flex flex-column justify-content-center">
                             <i class="fas fa-stethoscope fa-2x mb-2"></i>
                             <span>Novo Atendimento</span>
                         </a>
                     </div>
-                    <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
                         <a href="@Url.Action("Create", "Internacao")" class="btn btn-outline-info btn-lg w-100 h-100 d-flex flex-column justify-content-center">
                             <i class="fas fa-bed fa-2x mb-2"></i>
                             <span>Nova Internação</span>
                         </a>
                     </div>
-                    <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                        <a href="@Url.Action("Create", "AltaHospitalar")" class="btn btn-outline-danger btn-lg w-100 h-100 d-flex flex-column justify-content-center">
+                            <i class="fas fa-sign-out-alt fa-2x mb-2"></i>
+                            <span>Nova Alta</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
                         <a href="@Url.Action("Create", "ProfissionalSaude")" class="btn btn-outline-warning btn-lg w-100 h-100 d-flex flex-column justify-content-center">
                             <i class="fas fa-user-md fa-2x mb-2"></i>
                             <span>Novo Profissional</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                        <a href="@Url.Action("Index", "Especialidade")" class="btn btn-outline-secondary btn-lg w-100 h-100 d-flex flex-column justify-content-center">
+                            <i class="fas fa-stethoscope fa-2x mb-2"></i>
+                            <span>Especialidades</span>
                         </a>
                     </div>
                 </div>
@@ -138,7 +226,7 @@
 
 <!-- Informações Recentes -->
 <div class="row">
-    <div class="col-lg-6 mb-4">
+    <div class="col-lg-4 mb-4">
         <div class="card shadow">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">
@@ -146,32 +234,29 @@
                 </h6>
             </div>
             <div class="card-body">
-                <div class="list-group list-group-flush">
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="mb-1">João Silva</h6>
-                            <p class="mb-1 text-muted">Consulta - Dr. Maria Santos</p>
-                            <small class="text-muted">Cardiologia</small>
-                        </div>
-                        <small class="text-muted">10:30</small>
+                @if (Model.AtendimentosRecentes.Any())
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var atendimento in Model.AtendimentosRecentes)
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">@atendimento.PacienteNome</h6>
+                                    <p class="mb-1 text-muted">@atendimento.TipoAtendimento - Dr(a). @atendimento.ProfissionalNome</p>
+                                    <small class="text-muted">@atendimento.Especialidade</small>
+                                </div>
+                                <small class="text-muted">@atendimento.DataHora.ToString("HH:mm")</small>
+                            </div>
+                        }
                     </div>
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="mb-1">Ana Costa</h6>
-                            <p class="mb-1 text-muted">Emergência - Dr. Pedro Lima</p>
-                            <small class="text-muted">Clínica Geral</small>
-                        </div>
-                        <small class="text-muted">09:45</small>
+                }
+                else
+                {
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-clipboard-list fa-3x mb-3"></i>
+                        <p>Nenhum atendimento registrado</p>
                     </div>
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="mb-1">Carlos Oliveira</h6>
-                            <p class="mb-1 text-muted">Consulta - Dra. Lucia Ferreira</p>
-                            <small class="text-muted">Pediatria</small>
-                        </div>
-                        <small class="text-muted">09:15</small>
-                    </div>
-                </div>
+                }
                 <div class="text-center mt-3">
                     <a href="@Url.Action("Index", "Atendimento")" class="btn btn-primary btn-sm">
                         Ver Todos os Atendimentos
@@ -181,7 +266,7 @@
         </div>
     </div>
 
-    <div class="col-lg-6 mb-4">
+    <div class="col-lg-4 mb-4">
         <div class="card shadow">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">
@@ -189,35 +274,92 @@
                 </h6>
             </div>
             <div class="card-body">
-                <div class="list-group list-group-flush">
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="mb-1">Maria Fernanda</h6>
-                            <p class="mb-1 text-muted">UTI - Leito 05</p>
-                            <small class="text-muted">Desde 15/01/2025</small>
-                        </div>
-                        <span class="badge bg-danger rounded-pill">Crítico</span>
+                @if (Model.InternacoesAtivasDetalhes.Any())
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var internacao in Model.InternacoesAtivasDetalhes)
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">@internacao.PacienteNome</h6>
+                                    <p class="mb-1 text-muted">@internacao.Setor - @internacao.Quarto/@internacao.Leito</p>
+                                    <small class="text-muted">@internacao.DiasInternado dia(s)</small>
+                                </div>
+                                <span class="badge bg-@internacao.StatusCor rounded-pill">@internacao.StatusDescricao</span>
+                            </div>
+                        }
                     </div>
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="mb-1">Roberto Santos</h6>
-                            <p class="mb-1 text-muted">Clínica Geral - Quarto 201</p>
-                            <small class="text-muted">Desde 16/01/2025</small>
-                        </div>
-                        <span class="badge bg-warning rounded-pill">Estável</span>
+                }
+                else
+                {
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-bed fa-3x mb-3"></i>
+                        <p>Nenhuma internação ativa</p>
                     </div>
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="mb-1">Lucia Pereira</h6>
-                            <p class="mb-1 text-muted">Pediatria - Quarto 105</p>
-                            <small class="text-muted">Desde 17/01/2025</small>
-                        </div>
-                        <span class="badge bg-success rounded-pill">Recuperando</span>
-                    </div>
-                </div>
+                }
                 <div class="text-center mt-3">
                     <a href="@Url.Action("Index", "Internacao")" class="btn btn-primary btn-sm">
                         Ver Todas as Internações
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-sign-out-alt me-2"></i>Altas Recentes
+                </h6>
+            </div>
+            <div class="card-body">
+                @if (Model.AltasRecentes.Any())
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var alta in Model.AltasRecentes)
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">@alta.PacienteNome</h6>
+                                    <p class="mb-1 text-muted">@alta.Setor - @alta.DiasInternado dia(s)</p>
+                                    <small class="text-muted">@alta.DataAlta.ToString("dd/MM/yyyy")</small>
+                                </div>
+                                @switch (alta.CondicaoPaciente)
+                                {
+                                    case "Curado":
+                                        <span class="badge bg-success rounded-pill">@alta.CondicaoPaciente</span>
+                                        break;
+                                    case "Melhorado":
+                                        <span class="badge bg-info rounded-pill">@alta.CondicaoPaciente</span>
+                                        break;
+                                    case "Inalterado":
+                                        <span class="badge bg-warning rounded-pill">@alta.CondicaoPaciente</span>
+                                        break;
+                                    case "Piorado":
+                                        <span class="badge bg-danger rounded-pill">@alta.CondicaoPaciente</span>
+                                        break;
+                                    case "Óbito":
+                                        <span class="badge bg-dark rounded-pill">@alta.CondicaoPaciente</span>
+                                        break;
+                                    default:
+                                        <span class="badge bg-secondary rounded-pill">@alta.CondicaoPaciente</span>
+                                        break;
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-sign-out-alt fa-3x mb-3"></i>
+                        <p>Nenhuma alta registrada</p>
+                    </div>
+                }
+                <div class="text-center mt-3">
+                    <a href="@Url.Action("Index", "AltaHospitalar")" class="btn btn-primary btn-sm">
+                        Ver Todas as Altas
                     </a>
                 </div>
             </div>
