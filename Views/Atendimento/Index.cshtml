@@ -1,0 +1,144 @@
+@model IEnumerable<Hospisim.Domain.Entities.Atendimento>
+
+@{
+    ViewData["Title"] = "Atendimentos";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-0">
+            <i class="fas fa-clipboard-list text-primary me-2"></i>Atendimentos
+        </h1>
+        <p class="text-muted mb-0">Gerenciar atendimentos médicos</p>
+    </div>
+    <div>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i>Novo Atendimento
+        </a>
+    </div>
+</div>
+
+<div class="card shadow">
+    <div class="card-body">
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Data/Hora</th>
+                            <th>Paciente</th>
+                            <th>Profissional</th>
+                            <th>Tipo</th>
+                            <th>Status</th>
+                            <th>Local</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div>
+                                        <strong>@item.DataHora.ToString("dd/MM/yyyy")</strong>
+                                        <br>
+                                        <small class="text-muted">@item.DataHora.ToString("HH:mm")</small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <strong>@item.Paciente?.NomeCompleto</strong>
+                                        <br>
+                                        <small class="text-muted">
+                                            <i class="fas fa-file-medical me-1"></i>Prontuário: @item.Prontuario?.Numero
+                                        </small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <strong>@item.Profissional?.NomeCompleto</strong>
+                                        <br>
+                                        <small class="text-muted">@item.Profissional?.Especialidade?.Nome</small>
+                                    </div>
+                                </td>
+                                <td>
+                                    @switch (item.Tipo)
+                                    {
+                                        case Hospisim.Domain.Enums.TipoAtendimento.Emergencia:
+                                            <span class="badge bg-danger">
+                                                <i class="fas fa-exclamation-triangle me-1"></i>Emergência
+                                            </span>
+                                            break;
+                                        case Hospisim.Domain.Enums.TipoAtendimento.Consulta:
+                                            <span class="badge bg-info">
+                                                <i class="fas fa-stethoscope me-1"></i>Consulta
+                                            </span>
+                                            break;
+                                        case Hospisim.Domain.Enums.TipoAtendimento.Internacao:
+                                            <span class="badge bg-warning">
+                                                <i class="fas fa-bed me-1"></i>Internação
+                                            </span>
+                                            break;
+                                    }
+                                </td>
+                                <td>
+                                    @switch (item.Status)
+                                    {
+                                        case Hospisim.Domain.Enums.StatusAtendimento.Realizado:
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check me-1"></i>Realizado
+                                            </span>
+                                            break;
+                                        case Hospisim.Domain.Enums.StatusAtendimento.EmAndamento:
+                                            <span class="badge bg-primary">
+                                                <i class="fas fa-clock me-1"></i>Em Andamento
+                                            </span>
+                                            break;
+                                        case Hospisim.Domain.Enums.StatusAtendimento.Cancelado:
+                                            <span class="badge bg-secondary">
+                                                <i class="fas fa-times me-1"></i>Cancelado
+                                            </span>
+                                            break;
+                                    }
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark">
+                                        <i class="fas fa-map-marker-alt me-1"></i>@item.Local
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Details" asp-route-id="@item.Id" 
+                                           class="btn btn-outline-info btn-sm" title="Detalhes">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" 
+                                           class="btn btn-outline-warning btn-sm" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" 
+                                           class="btn btn-outline-danger btn-sm" title="Excluir">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">Nenhum atendimento cadastrado</h5>
+                <p class="text-muted">Clique no botão "Novo Atendimento" para começar.</p>
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>Novo Atendimento
+                </a>
+            </div>
+        }
+    </div>
+</div> 

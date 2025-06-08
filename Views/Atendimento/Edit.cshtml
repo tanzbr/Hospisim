@@ -1,0 +1,206 @@
+@model Hospisim.Domain.Entities.Atendimento
+
+@{
+    ViewData["Title"] = "Editar Atendimento";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-0">
+            <i class="fas fa-edit text-warning me-2"></i>Editar Atendimento
+        </h1>
+        <p class="text-muted mb-0">Modificar dados do atendimento médico</p>
+    </div>
+    <div>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Voltar
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-body">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    
+                    <input type="hidden" asp-for="Id" />
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="DataHora" class="form-label">
+                                <i class="fas fa-calendar-alt me-1"></i>Data e Hora
+                            </label>
+                            <input asp-for="DataHora" class="form-control" type="datetime-local" />
+                            <span asp-validation-for="DataHora" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Tipo" class="form-label">
+                                <i class="fas fa-clipboard-list me-1"></i>Tipo de Atendimento
+                            </label>
+                            <select asp-for="Tipo" class="form-select" asp-items="Html.GetEnumSelectList<Hospisim.Domain.Enums.TipoAtendimento>()">
+                                <option value="">Selecione...</option>
+                            </select>
+                            <span asp-validation-for="Tipo" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="PacienteId" class="form-label">
+                                <i class="fas fa-user me-1"></i>Paciente
+                            </label>
+                            <select asp-for="PacienteId" class="form-select" asp-items="ViewBag.PacienteId" id="pacienteSelect">
+                                <option value="">Selecione um paciente...</option>
+                            </select>
+                            <span asp-validation-for="PacienteId" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ProntuarioId" class="form-label">
+                                <i class="fas fa-file-medical me-1"></i>Prontuário
+                            </label>
+                            <select asp-for="ProntuarioId" class="form-select" asp-items="ViewBag.ProntuarioId" id="prontuarioSelect">
+                                <option value="">Selecione um prontuário...</option>
+                            </select>
+                            <span asp-validation-for="ProntuarioId" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ProfissionalId" class="form-label">
+                            <i class="fas fa-user-md me-1"></i>Profissional Responsável
+                        </label>
+                        <select asp-for="ProfissionalId" class="form-select" asp-items="ViewBag.ProfissionalId">
+                            <option value="">Selecione um profissional...</option>
+                        </select>
+                        <span asp-validation-for="ProfissionalId" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Status" class="form-label">
+                                <i class="fas fa-info-circle me-1"></i>Status
+                            </label>
+                            <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<Hospisim.Domain.Enums.StatusAtendimento>()">
+                                <option value="">Selecione...</option>
+                            </select>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Local" class="form-label">
+                                <i class="fas fa-map-marker-alt me-1"></i>Local
+                            </label>
+                            <input asp-for="Local" class="form-control" />
+                            <span asp-validation-for="Local" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-save me-1"></i>Atualizar
+                        </button>
+                        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-info">
+                            <i class="fas fa-eye me-1"></i>Ver Detalhes
+                        </a>
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-1"></i>Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-info-circle me-1"></i>Informações
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                    <strong>Atenção</strong>
+                    <p class="text-muted mb-0 mt-1">Alterações podem afetar relatórios e histórico médico.</p>
+                </div>
+                
+                <div class="mb-3">
+                    <i class="fas fa-clock text-info me-2"></i>
+                    <strong>Status</strong>
+                    <p class="text-muted mb-0 mt-1">Atualize o status conforme o andamento do atendimento.</p>
+                </div>
+                
+                <div class="mb-0">
+                    <i class="fas fa-clipboard-check text-success me-2"></i>
+                    <strong>Status</strong>
+                    <p class="text-muted mb-0 mt-1">Atualize o status conforme necessário.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow mt-3">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-clipboard-list me-1"></i>Ações Rápidas
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-info btn-sm">
+                        <i class="fas fa-eye me-1"></i>Ver Detalhes
+                    </a>
+                    <a href="#" class="btn btn-outline-success btn-sm">
+                        <i class="fas fa-prescription me-1"></i>Prescrições
+                    </a>
+                    <a href="#" class="btn btn-outline-warning btn-sm">
+                        <i class="fas fa-vial me-1"></i>Exames
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            // Quando o paciente for selecionado, carregar os prontuários
+            $('#pacienteSelect').change(function() {
+                var pacienteId = $(this).val();
+                var prontuarioSelect = $('#prontuarioSelect');
+                
+                // Limpar o select de prontuários
+                prontuarioSelect.empty();
+                prontuarioSelect.append('<option value="">Carregando...</option>');
+                
+                if (pacienteId) {
+                    $.get('@Url.Action("GetProntuariosByPaciente")', { pacienteId: pacienteId })
+                        .done(function(data) {
+                            prontuarioSelect.empty();
+                            prontuarioSelect.append('<option value="">Selecione um prontuário...</option>');
+                            
+                            $.each(data, function(index, item) {
+                                prontuarioSelect.append('<option value="' + item.value + '">' + item.text + '</option>');
+                            });
+                        })
+                        .fail(function() {
+                            prontuarioSelect.empty();
+                            prontuarioSelect.append('<option value="">Erro ao carregar prontuários</option>');
+                        });
+                } else {
+                    prontuarioSelect.empty();
+                    prontuarioSelect.append('<option value="">Selecione um prontuário...</option>');
+                }
+            });
+        });
+    </script>
+} 

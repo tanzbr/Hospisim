@@ -1,0 +1,249 @@
+@model Hospisim.Domain.Entities.Atendimento
+
+@{
+    ViewData["Title"] = "Excluir Atendimento";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-0">
+            <i class="fas fa-trash text-danger me-2"></i>Excluir Atendimento
+        </h1>
+        <p class="text-muted mb-0">Confirmar exclusão do atendimento médico</p>
+    </div>
+    <div>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Voltar
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="m-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Confirmar Exclusão
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Atenção!</strong> Esta ação não pode ser desfeita. Tem certeza que deseja excluir este atendimento?
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-5">Data/Hora:</dt>
+                            <dd class="col-sm-7">
+                                <strong>@Model.DataHora.ToString("dd/MM/yyyy")</strong><br>
+                                <small class="text-muted">@Model.DataHora.ToString("HH:mm")</small>
+                            </dd>
+                            
+                            <dt class="col-sm-5">Tipo:</dt>
+                            <dd class="col-sm-7">
+                                @switch (Model.Tipo)
+                                {
+                                    case Hospisim.Domain.Enums.TipoAtendimento.Emergencia:
+                                        <span class="badge bg-danger">Emergência</span>
+                                        break;
+                                    case Hospisim.Domain.Enums.TipoAtendimento.Consulta:
+                                        <span class="badge bg-info">Consulta</span>
+                                        break;
+                                    case Hospisim.Domain.Enums.TipoAtendimento.Internacao:
+                                        <span class="badge bg-warning">Internação</span>
+                                        break;
+                                }
+                            </dd>
+                            
+                            <dt class="col-sm-5">Paciente:</dt>
+                            <dd class="col-sm-7">
+                                <strong>@Model.Paciente?.NomeCompleto</strong>
+                            </dd>
+                            
+                            <dt class="col-sm-5">Local:</dt>
+                            <dd class="col-sm-7">@Model.Local</dd>
+                        </dl>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-5">Profissional:</dt>
+                            <dd class="col-sm-7">
+                                <strong>@Model.Profissional?.NomeCompleto</strong>
+                                <br>
+                                <small class="text-muted">@Model.Profissional?.Especialidade?.Nome</small>
+                            </dd>
+                            
+                            <dt class="col-sm-5">Status:</dt>
+                            <dd class="col-sm-7">
+                                @switch (Model.Status)
+                                {
+                                    case Hospisim.Domain.Enums.StatusAtendimento.Realizado:
+                                        <span class="badge bg-success">Realizado</span>
+                                        break;
+                                    case Hospisim.Domain.Enums.StatusAtendimento.EmAndamento:
+                                        <span class="badge bg-primary">Em Andamento</span>
+                                        break;
+                                    case Hospisim.Domain.Enums.StatusAtendimento.Cancelado:
+                                        <span class="badge bg-secondary">Cancelado</span>
+                                        break;
+                                }
+                            </dd>
+                            
+                            <dt class="col-sm-5">Prescrições:</dt>
+                            <dd class="col-sm-7">
+                                <span class="badge bg-warning">
+                                    @Model.Prescricoes.Count() prescrições
+                                </span>
+                            </dd>
+                            
+                            <dt class="col-sm-5">Exames:</dt>
+                            <dd class="col-sm-7">
+                                <span class="badge bg-info">
+                                    @Model.Exames.Count() exames
+                                </span>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+
+                @if (Model.Prescricoes.Any() || Model.Exames.Any() || Model.Internacao != null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-ban me-2"></i>
+                        <strong>Não é possível excluir!</strong> Este atendimento possui dados vinculados:
+                        <ul class="mb-0 mt-2">
+                            @if (Model.Prescricoes.Any())
+                            {
+                                <li>@Model.Prescricoes.Count() prescrição(ões) médica(s)</li>
+                            }
+                            @if (Model.Exames.Any())
+                            {
+                                <li>@Model.Exames.Count() exame(s) solicitado(s)</li>
+                            }
+                            @if (Model.Internacao != null)
+                            {
+                                <li>Registro de internação</li>
+                            }
+                        </ul>
+                        <p class="mt-2 mb-0">Para manter a integridade dos dados médicos, considere alterar o status para "Cancelado" ao invés de excluir.</p>
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Voltar
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-warning">
+                            <i class="fas fa-edit me-1"></i>Alterar Status
+                        </a>
+                    </div>
+                }
+                else
+                {
+
+                    
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-1"></i>Sim, Excluir
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-times me-1"></i>Cancelar
+                            </a>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-info-circle me-1"></i>Informações Importantes
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                    <strong>Exclusão Permanente</strong>
+                    <p class="text-muted mb-0 mt-1">Esta ação não pode ser desfeita.</p>
+                </div>
+                
+                <div class="mb-3">
+                    <i class="fas fa-file-medical text-info me-2"></i>
+                    <strong>Histórico Médico</strong>
+                    <p class="text-muted mb-0 mt-1">Atendimentos com prescrições ou exames não podem ser excluídos.</p>
+                </div>
+                
+                <div class="mb-3">
+                    <i class="fas fa-ban text-danger me-2"></i>
+                    <strong>Alternativa</strong>
+                    <p class="text-muted mb-0 mt-1">Considere alterar o status para "Cancelado".</p>
+                </div>
+                
+                <div class="mb-0">
+                    <i class="fas fa-chart-bar text-success me-2"></i>
+                    <strong>Relatórios</strong>
+                    <p class="text-muted mb-0 mt-1">Dados estatísticos podem ser afetados.</p>
+                </div>
+            </div>
+        </div>
+        
+        @if (Model.Prescricoes.Any() || Model.Exames.Any())
+        {
+            <div class="card shadow mt-3">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-warning">
+                        <i class="fas fa-exclamation-triangle me-1"></i>Dados Vinculados
+                    </h6>
+                </div>
+                <div class="card-body">
+                    @if (Model.Prescricoes.Any())
+                    {
+                        <div class="mb-3">
+                            <h6 class="text-primary">Prescrições (@Model.Prescricoes.Count())</h6>
+                            <ul class="list-unstyled mb-0">
+                                @foreach (var prescricao in Model.Prescricoes.Take(3))
+                                {
+                                    <li class="mb-1">
+                                        <i class="fas fa-prescription text-success me-2"></i>
+                                        <small>@prescricao.Medicamento</small>
+                                    </li>
+                                }
+                                @if (Model.Prescricoes.Count() > 3)
+                                {
+                                    <li><small class="text-muted">E mais @(Model.Prescricoes.Count() - 3)...</small></li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    
+                    @if (Model.Exames.Any())
+                    {
+                        <div class="mb-0">
+                            <h6 class="text-primary">Exames (@Model.Exames.Count())</h6>
+                            <ul class="list-unstyled mb-0">
+                                @foreach (var exame in Model.Exames.Take(3))
+                                {
+                                                                         <li class="mb-1">
+                                         <i class="fas fa-vial text-info me-2"></i>
+                                         <small>@exame.Tipo</small>
+                                     </li>
+                                }
+                                @if (Model.Exames.Count() > 3)
+                                {
+                                    <li><small class="text-muted">E mais @(Model.Exames.Count() - 3)...</small></li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div> 
