@@ -1,0 +1,17 @@
+﻿@model Hospisim.Models.PacienteVM
+@{
+    ViewData["Title"] = "Excluir Paciente";
+}
+
+<h2>Confirma a exclusão?</h2>
+
+<div class="alert alert-danger">
+    <strong>@Model.NomeCompleto</strong><br />
+    CPF: @Model.CPF
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Excluir</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

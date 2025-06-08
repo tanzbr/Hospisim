@@ -3,6 +3,7 @@ using System;
 using Hospisim.Data;
 using Hospisim.Business.Contracts;
 using Hospisim.Business.Services;
+using FluentValidation.AspNetCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         builder.Configuration.GetConnectionString("Default")));
 
 builder.Services.AddScoped<IPacienteService, PacienteService>();
+
+builder.Services.AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters();
 
 var app = builder.Build();
 
