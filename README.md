@@ -11,6 +11,8 @@ Sistema completo de gestão hospitalar desenvolvido em **ASP.NET Core MVC** para
 - **🚪 Altas Hospitalares** - Gestão de altas e instruções pós-alta
 - **📊 Dashboard** - Visão geral com estatísticas em tempo real
 
+![image](https://github.com/user-attachments/assets/714b34c9-8698-4f9c-8757-6a2f1155aac2)
+
 ## 🚀 Como Executar
 
 ### Pré-requisitos
@@ -46,30 +48,6 @@ Sistema completo de gestão hospitalar desenvolvido em **ASP.NET Core MVC** para
    ```bash
    dotnet run
    ```
-
-5. **Acesse a aplicação**
-   
-   Abra o navegador e acesse: `https://localhost:5001` ou `http://localhost:5000`
-
-### Comandos Úteis
-
-```bash
-# Restaurar dependências
-dotnet restore
-
-# Compilar o projeto
-dotnet build
-
-# Executar testes (se houver)
-dotnet test
-
-# Criar nova migração
-dotnet ef migrations add NomeDaMigracao
-
-# Reverter migração
-dotnet ef database update MigracaoAnterior
-```
-
 ## 🗄️ Modelo de Dados
 
 ### Entidades Principais
@@ -156,30 +134,7 @@ dotnet ef database update MigracaoAnterior
 
 ### Diagrama de Relacionamentos
 
-```
-Paciente (1) ──────── (N) Prontuário (1) ──────── (N) Atendimento
-    │                                                    │
-    │                                                    │ (N)
-    │ (N)                                                │
-    │                                              ProfissionalSaude
-    │                                                    │ (N)
-    │                                                    │
-    │                                              Especialidade (1)
-    │
-    │ (N)
-    │
-Internação (1) ──────── (1) AltaHospitalar
-    │ (1)
-    │
-    │ (1)
-Atendimento ──────── (N) Prescrição
-    │                      │ (N)
-    │ (N)                  │
-    │                ProfissionalSaude (1)
-    │
-    │ (N)
-Exame
-```
+![image](https://github.com/user-attachments/assets/8d7fe28a-d476-43fe-acb1-8b1f5ddf6377)
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -242,11 +197,3 @@ Hospisim/
 - Registro de altas
 - Instruções pós-alta
 - Condição do paciente
-
-## 📝 Licença
-
-Este projeto foi desenvolvido para fins educacionais.
-
----
-
-**Hospital Vida Plena** - Sistema de Gestão Hospitalar © 2025
