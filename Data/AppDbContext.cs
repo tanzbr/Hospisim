@@ -25,7 +25,8 @@ namespace Hospisim.Data
             mb.Entity<Prontuario>()
               .HasOne(p => p.Paciente)
               .WithMany(pac => pac.Prontuarios)
-              .HasForeignKey(p => p.PacienteId);
+              .HasForeignKey(p => p.PacienteId)
+              .OnDelete(DeleteBehavior.Cascade);
 
             // Profissional N-1 Especialidade
             mb.Entity<ProfissionalSaude>()
@@ -33,7 +34,59 @@ namespace Hospisim.Data
               .WithMany(e => e.Profissionais)
               .HasForeignKey(p => p.EspecialidadeId);
 
-            // Mapeie os demais relacionamentos (Atendimento ↔ Paciente/Profissional/Prontuário etc.)
+            // Atendimento N-1 Paciente
+            mb.Entity<Atendimento>()
+              .HasOne(a => a.Paciente)
+              .WithMany()
+              .HasForeignKey(a => a.PacienteId)
+              .OnDelete(DeleteBehavior.Cascade);
+
+            // Atendimento N-1 Prontuário
+            mb.Entity<Atendimento>()
+              .HasOne(a => a.Prontuario)
+              .WithMany(p => p.Atendimentos)
+              .HasForeignKey(a => a.ProntuarioId)
+              .OnDelete(DeleteBehavior.Restrict);
+
+            // Atendimento N-1 Profissional
+            mb.Entity<Atendimento>()
+              .HasOne(a => a.Profissional)
+              .WithMany(p => p.Atendimentos)
+              .HasForeignKey(a => a.ProfissionalId);
+
+            // Atendimento 1-1 Internação
+            mb.Entity<Atendimento>()
+              .HasOne(a => a.Internacao)
+              .WithOne(i => i.Atendimento)
+              .HasForeignKey<Internacao>(i => i.AtendimentoId)
+              .OnDelete(DeleteBehavior.Cascade);
+
+            // Internação N-1 Paciente
+            mb.Entity<Internacao>()
+              .HasOne(i => i.Paciente)
+              .WithMany()
+              .HasForeignKey(i => i.PacienteId)
+              .OnDelete(DeleteBehavior.Restrict);
+
+            // Internação 1-1 Alta Hospitalar
+            mb.Entity<Internacao>()
+              .HasOne(i => i.Alta)
+              .WithOne(a => a.Internacao)
+              .HasForeignKey<AltaHospitalar>(a => a.InternacaoId);
+
+            // --- Prescricao ---
+            mb.Entity<Prescricao>()
+              .HasOne(p => p.Atendimento)
+              .WithMany(a => a.Prescricoes)
+              .HasForeignKey(p => p.AtendimentoId)
+              .OnDelete(DeleteBehavior.Cascade);
+
+            mb.Entity<Prescricao>()
+              .HasOne(p => p.Profissional)
+              .WithMany(pr => pr.Prescricoes)
+              .HasForeignKey(p => p.ProfissionalId)
+              .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

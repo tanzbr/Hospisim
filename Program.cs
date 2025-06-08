@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using Hospisim.Data;
+using Hospisim.Business.Contracts;
+using Hospisim.Business.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +14,19 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("Default")));
 
+builder.Services.AddScoped<IPacienteService, PacienteService>();
+
 var app = builder.Build();
+
+
+// popular banco
+using (var scope = app.Services.CreateScope())
+{
+    var provider = scope.ServiceProvider;
+    var db = provider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();          // aplica migrations pendentes
+    SeedData.Initialize(provider);  // popula somente se vazio
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
