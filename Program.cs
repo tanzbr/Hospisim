@@ -15,7 +15,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("Default")));
 
+// Registrar todos os serviços
 builder.Services.AddScoped<IPacienteService, PacienteService>();
+builder.Services.AddScoped<IEspecialidadeService, EspecialidadeService>();
+builder.Services.AddScoped<IProfissionalSaudeService, ProfissionalSaudeService>();
+builder.Services.AddScoped<IAtendimentoService, AtendimentoService>();
+builder.Services.AddScoped<IProntuarioService, ProntuarioService>();
+builder.Services.AddScoped<IInternacaoService, InternacaoService>();
 
 builder.Services.AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters();
