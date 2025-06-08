@@ -17,13 +17,13 @@ namespace Hospisim.Domain.Entities
 
         // — FKs e navegações —
         public Guid PacienteId { get; set; }
-        public Paciente Paciente { get; set; } = default!;
+        public Paciente? Paciente { get; set; }
 
         public Guid ProfissionalId { get; set; }
-        public ProfissionalSaude Profissional { get; set; } = default!;
+        public ProfissionalSaude? Profissional { get; set; }
 
         public Guid ProntuarioId { get; set; }
-        public Prontuario Prontuario { get; set; } = default!;
+        public Prontuario? Prontuario { get; set; }
 
         public ICollection<Prescricao> Prescricoes { get; set; } = new List<Prescricao>();
         public ICollection<Exame> Exames { get; set; } = new List<Exame>();

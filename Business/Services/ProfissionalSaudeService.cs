@@ -39,7 +39,7 @@ namespace Hospisim.Business.Services
 
         public async Task<ProfissionalSaude> UpdateAsync(ProfissionalSaude profissional)
         {
-            _context.Entry(profissional).State = EntityState.Modified;
+            _context.Profissionais.Update(profissional);
             await _context.SaveChangesAsync();
             return profissional;
         }

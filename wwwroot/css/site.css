@@ -39,12 +39,44 @@ body {
   border-left: 0.25rem solid #f6c23e !important;
 }
 
+.border-left-danger {
+  border-left: 0.25rem solid #e74a3b !important;
+}
+
+.border-left-secondary {
+  border-left: 0.25rem solid #858796 !important;
+}
+
+.border-left-dark {
+  border-left: 0.25rem solid #5a5c69 !important;
+}
+
+.border-left-light {
+  border-left: 0.25rem solid #f8f9fc !important;
+}
+
 .text-gray-300 {
   color: #dddfeb !important;
 }
 
 .text-gray-800 {
   color: #5a5c69 !important;
+}
+
+.text-danger {
+  color: #e74a3b !important;
+}
+
+.text-secondary {
+  color: #858796 !important;
+}
+
+.text-dark {
+  color: #5a5c69 !important;
+}
+
+.text-muted {
+  color: #858796 !important;
 }
 
 .shadow {

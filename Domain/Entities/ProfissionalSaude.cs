@@ -22,7 +22,7 @@ namespace Hospisim.Domain.Entities
 
         // — FK e navegação —
         public Guid EspecialidadeId { get; set; }
-        public Especialidade Especialidade { get; set; } = default!;
+        public Especialidade? Especialidade { get; set; }
 
         public DateTime DataAdmissao { get; set; }
         public int CargaHorariaSemanal { get; set; }

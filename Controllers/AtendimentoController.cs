@@ -76,12 +76,54 @@ namespace Hospisim.Controllers
             if (id != atendimento.Id)
                 return NotFound();
 
+            // Validações customizadas
+            if (atendimento.PacienteId == Guid.Empty)
+            {
+                ModelState.AddModelError("PacienteId", "O paciente é obrigatório.");
+            }
+            if (atendimento.ProfissionalId == Guid.Empty)
+            {
+                ModelState.AddModelError("ProfissionalId", "O profissional é obrigatório.");
+            }
+            if (atendimento.ProntuarioId == Guid.Empty)
+            {
+                ModelState.AddModelError("ProntuarioId", "O prontuário é obrigatório.");
+            }
+
             if (ModelState.IsValid)
             {
-                await _atendimentoService.UpdateAsync(atendimento);
-                TempData["Success"] = "Atendimento atualizado com sucesso!";
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    // Buscar a entidade existente do banco
+                    var existingAtendimento = await _atendimentoService.GetByIdAsync(id);
+                    if (existingAtendimento == null)
+                        return NotFound();
+
+                    // Atualizar as propriedades
+                    existingAtendimento.DataHora = atendimento.DataHora;
+                    existingAtendimento.Tipo = atendimento.Tipo;
+                    existingAtendimento.Status = atendimento.Status;
+                    existingAtendimento.Local = atendimento.Local;
+                    existingAtendimento.PacienteId = atendimento.PacienteId;
+                    existingAtendimento.ProfissionalId = atendimento.ProfissionalId;
+                    existingAtendimento.ProntuarioId = atendimento.ProntuarioId;
+
+                    await _atendimentoService.UpdateAsync(existingAtendimento);
+                    TempData["Success"] = "Atendimento atualizado com sucesso!";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    TempData["Error"] = $"Erro ao atualizar atendimento: {ex.Message}";
+                }
             }
+            else
+            {
+                // Debug: Adicionar erros do ModelState ao TempData
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                TempData["Error"] = $"Dados inválidos: {string.Join(", ", errors)}";
+            }
+            
             await PopulateDropDowns(atendimento.PacienteId, atendimento.ProfissionalId, atendimento.ProntuarioId);
             return View(atendimento);
         }

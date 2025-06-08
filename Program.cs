@@ -22,6 +22,7 @@ builder.Services.AddScoped<IProfissionalSaudeService, ProfissionalSaudeService>(
 builder.Services.AddScoped<IAtendimentoService, AtendimentoService>();
 builder.Services.AddScoped<IProntuarioService, ProntuarioService>();
 builder.Services.AddScoped<IInternacaoService, InternacaoService>();
+builder.Services.AddScoped<IAltaHospitalarService, AltaHospitalarService>();
 
 builder.Services.AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters();

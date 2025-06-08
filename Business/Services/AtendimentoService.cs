@@ -46,7 +46,7 @@ namespace Hospisim.Business.Services
 
         public async Task<Atendimento> UpdateAsync(Atendimento atendimento)
         {
-            _context.Entry(atendimento).State = EntityState.Modified;
+            _context.Atendimentos.Update(atendimento);
             await _context.SaveChangesAsync();
             return atendimento;
         }

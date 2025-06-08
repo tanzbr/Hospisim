@@ -16,6 +16,6 @@ namespace Hospisim.Domain.Entities
 
         // — FK e navegação —
         public Guid InternacaoId { get; set; }
-        public Internacao Internacao { get; set; } = default!;
+        public Internacao? Internacao { get; set; }
     }
 }

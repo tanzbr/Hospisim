@@ -70,12 +70,59 @@ namespace Hospisim.Controllers
             if (id != profissional.Id)
                 return NotFound();
 
+            // Validação customizada para EspecialidadeId
+            if (profissional.EspecialidadeId == Guid.Empty)
+            {
+                ModelState.AddModelError("EspecialidadeId", "A especialidade é obrigatória.");
+            }
+            else
+            {
+                // Verificar se a especialidade existe
+                var especialidadeExists = await _especialidadeService.GetByIdAsync(profissional.EspecialidadeId);
+                if (especialidadeExists == null)
+                {
+                    ModelState.AddModelError("EspecialidadeId", "Especialidade selecionada não existe.");
+                }
+            }
+
             if (ModelState.IsValid)
             {
-                await _profissionalService.UpdateAsync(profissional);
-                TempData["Success"] = "Profissional atualizado com sucesso!";
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    // Buscar a entidade existente do banco
+                    var existingProfissional = await _profissionalService.GetByIdAsync(id);
+                    if (existingProfissional == null)
+                        return NotFound();
+
+                    // Atualizar as propriedades
+                    existingProfissional.NomeCompleto = profissional.NomeCompleto;
+                    existingProfissional.CPF = profissional.CPF;
+                    existingProfissional.Email = profissional.Email;
+                    existingProfissional.Telefone = profissional.Telefone;
+                    existingProfissional.RegistroConselho = profissional.RegistroConselho;
+                    existingProfissional.TipoRegistro = profissional.TipoRegistro;
+                    existingProfissional.EspecialidadeId = profissional.EspecialidadeId;
+                    existingProfissional.DataAdmissao = profissional.DataAdmissao;
+                    existingProfissional.CargaHorariaSemanal = profissional.CargaHorariaSemanal;
+                    existingProfissional.Turno = profissional.Turno;
+                    existingProfissional.Ativo = profissional.Ativo;
+
+                    await _profissionalService.UpdateAsync(existingProfissional);
+                    TempData["Success"] = "Profissional atualizado com sucesso!";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    TempData["Error"] = $"Erro ao atualizar profissional: {ex.Message}";
+                }
             }
+            else
+            {
+                // Debug: Adicionar erros do ModelState ao TempData
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                TempData["Error"] = $"Dados inválidos: {string.Join(", ", errors)}";
+            }
+            
             await PopulateEspecialidadesDropDown(profissional.EspecialidadeId);
             return View(profissional);
         }
