@@ -8,10 +8,10 @@ namespace Hospisim.Domain.Entities
         [Key] public Guid Id { get; set; } = Guid.NewGuid();
 
         public Guid PacienteId { get; set; }
-        public Paciente Paciente { get; set; } = default!;
+        public Paciente? Paciente { get; set; }
 
         public Guid AtendimentoId { get; set; }
-        public Atendimento Atendimento { get; set; } = default!;
+        public Atendimento? Atendimento { get; set; }
 
         public DateTime DataEntrada { get; set; } = DateTime.UtcNow;
         public DateTime? PrevisaoAlta { get; set; }

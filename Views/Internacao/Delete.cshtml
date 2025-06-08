@@ -1,0 +1,195 @@
+@model Hospisim.Domain.Entities.Internacao
+
+@{
+    ViewData["Title"] = "Excluir Internação";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-0 text-danger">
+            <i class="fas fa-trash text-danger me-2"></i>Excluir Internação
+        </h1>
+        <p class="text-muted mb-0">Confirme a exclusão da internação</p>
+    </div>
+    <div>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Voltar
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">
+                <i class="fas fa-exclamation-triangle me-2"></i>Atenção!
+            </h4>
+            <p>Você está prestes a excluir esta internação. Esta ação não pode ser desfeita.</p>
+            <hr>
+            <p class="mb-0">
+                <strong>Paciente:</strong> @Model.Paciente?.NomeCompleto<br>
+                <strong>Data de Entrada:</strong> @Model.DataEntrada.ToString("dd/MM/yyyy HH:mm")<br>
+                <strong>Setor:</strong> @Model.Setor - Quarto @Model.Quarto, Leito @Model.Leito
+            </p>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>Detalhes da Internação
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-user-injured me-1"></i>Paciente
+                        </label>
+                        <div class="form-control-plaintext">
+                            <strong>@Model.Paciente?.NomeCompleto</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-calendar-alt me-1"></i>Data de Entrada
+                        </label>
+                        <div class="form-control-plaintext">
+                            @Model.DataEntrada.ToString("dd/MM/yyyy HH:mm")
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-hospital me-1"></i>Setor
+                        </label>
+                        <div class="form-control-plaintext">
+                            <span class="badge bg-info">@Model.Setor</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-door-open me-1"></i>Quarto
+                        </label>
+                        <div class="form-control-plaintext">
+                            <strong>@Model.Quarto</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-bed me-1"></i>Leito
+                        </label>
+                        <div class="form-control-plaintext">
+                            <strong>@Model.Leito</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-info-circle me-1"></i>Status
+                        </label>
+                        <div class="form-control-plaintext">
+                            @switch (Model.StatusInternacao)
+                            {
+                                case Hospisim.Domain.Enums.StatusInternacao.Ativa:
+                                    <span class="badge bg-success">Ativa</span>
+                                    break;
+                                case Hospisim.Domain.Enums.StatusInternacao.AltaConcedida:
+                                    <span class="badge bg-primary">Alta Concedida</span>
+                                    break;
+                                case Hospisim.Domain.Enums.StatusInternacao.Transferido:
+                                    <span class="badge bg-warning">Transferido</span>
+                                    break;
+                                case Hospisim.Domain.Enums.StatusInternacao.Obito:
+                                    <span class="badge bg-dark">Óbito</span>
+                                    break;
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-calendar-check me-1"></i>Previsão de Alta
+                        </label>
+                        <div class="form-control-plaintext">
+                            @if (Model.PrevisaoAlta.HasValue)
+                            {
+                                @Model.PrevisaoAlta.Value.ToString("dd/MM/yyyy")
+                            }
+                            else
+                            {
+                                <span class="text-muted">Não definida</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-muted">
+                        <i class="fas fa-notes-medical me-1"></i>Motivo da Internação
+                    </label>
+                    <div class="form-control-plaintext border rounded p-3 bg-light">
+                        @Model.MotivoInternacao
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        @if (Model.Alta != null)
+        {
+            <div class="alert alert-warning" role="alert">
+                <h6 class="alert-heading">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Alta Registrada
+                </h6>
+                <p class="mb-0">Esta internação possui uma alta hospitalar registrada. A exclusão da internação também excluirá a alta.</p>
+            </div>
+        }
+
+        <div class="card shadow">
+            <div class="card-header bg-danger text-white">
+                <h6 class="m-0 font-weight-bold">
+                    <i class="fas fa-exclamation-triangle me-1"></i>Confirmação
+                </h6>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-3">
+                    Tem certeza de que deseja excluir esta internação?
+                </p>
+                
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-1"></i>Sim, Excluir
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-1"></i>Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow mt-3">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-info">
+                    <i class="fas fa-info-circle me-1"></i>Informações
+                </h6>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-0">
+                    <i class="fas fa-shield-alt me-1"></i>
+                    A exclusão só será permitida se não houver dados relacionados que dependam desta internação.
+                </p>
+            </div>
+        </div>
+    </div>
+</div> 

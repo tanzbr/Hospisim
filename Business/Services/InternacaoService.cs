@@ -44,7 +44,7 @@ namespace Hospisim.Business.Services
 
         public async Task<Internacao> UpdateAsync(Internacao internacao)
         {
-            _context.Entry(internacao).State = EntityState.Modified;
+            _context.Internacoes.Update(internacao);
             await _context.SaveChangesAsync();
             return internacao;
         }
