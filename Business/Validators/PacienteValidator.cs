@@ -8,15 +8,27 @@ namespace Hospisim.Business.Validators
     {
         public PacienteValidator()
         {
-            RuleFor(p => p.NomeCompleto).NotEmpty().MaximumLength(120);
+            RuleFor(p => p.NomeCompleto)
+            .NotEmpty().WithMessage("Nome é obrigatório")
+            .MaximumLength(120);
+
             RuleFor(p => p.CPF)
-                .NotEmpty()
-                .Must(CpfHelper.IsValid).WithMessage("CPF inválido");
-            RuleFor(p => p.Email)
-                .EmailAddress()
-                .When(p => !string.IsNullOrWhiteSpace(p.Email));
+                .NotEmpty().Must(CpfHelper.IsValid)
+                .WithMessage("CPF inválido");
+
             RuleFor(p => p.DataNascimento)
-                .LessThan(DateTime.Today).WithMessage("Data de nascimento no futuro");
+                .LessThan(DateTime.Today).WithMessage("Data de nascimento futura");
+
+            When(p => !string.IsNullOrWhiteSpace(p.Email), () =>
+            {
+                RuleFor(p => p.Email).EmailAddress();
+            });
+
+            RuleFor(p => p.Telefone)
+                .MaximumLength(20);
+
+            RuleFor(p => p.NumeroCartaoSUS)
+                .MaximumLength(15);
         }
     }
 }

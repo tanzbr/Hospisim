@@ -1,6 +1,10 @@
-﻿using Hospisim.Business.Contracts;
+﻿using FluentValidation;
+using Hospisim.Business.Contracts;
+using Hospisim.Domain.Entities;
+using Hospisim.Domain.Enums;
 using Hospisim.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Hospisim.Controllers
 {
@@ -9,12 +13,24 @@ namespace Hospisim.Controllers
         private readonly IPacienteService _service;
         public PacienteController(IPacienteService service) => _service = service;
 
-        // GET: /Paciente
-        public async Task<IActionResult> Index()
-            => View((await _service.GetAllAsync())
-                    .Select(PacienteVM.FromEntity));
+        /* ---------- helpers ---------- */
+        private static IEnumerable<SelectListItem> EnumSelect<T>() where T : Enum =>
+            Enum.GetValues(typeof(T))
+                .Cast<T>()
+                .Select(e => new SelectListItem(e.ToString(), e.ToString()));
 
-        // GET: /Paciente/Details/5
+        private void PreencherDrops()
+        {
+            ViewBag.Sexos = EnumSelect<Sexo>();
+            ViewBag.Sangues = EnumSelect<TipoSanguineo>();
+            ViewBag.EstadosCivis = EnumSelect<EstadoCivil>();
+        }
+
+        /* ---------- Actions ---------- */
+
+        public async Task<IActionResult> Index()
+            => View((await _service.GetAllAsync()).Select(PacienteVM.FromEntity));
+
         public async Task<IActionResult> Details(Guid id)
         {
             var ent = await _service.GetByIdAsync(id);
@@ -22,44 +38,82 @@ namespace Hospisim.Controllers
             return View(PacienteVM.FromEntity(ent));
         }
 
-        // GET: /Paciente/Create
-        public IActionResult Create() => View();
+        public IActionResult Create()
+        {
+            PreencherDrops();
+            return View();
+        }
 
-        // POST: /Paciente/Create
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PacienteVM vm)
         {
-            if (!ModelState.IsValid) return View(vm);
-            var entidade = new Hospisim.Domain.Entities.Paciente();
+            if (!ModelState.IsValid)
+            {
+                PreencherDrops();
+                return View(vm);
+            }
+
+            var entidade = new Paciente();
             vm.UpdateEntity(entidade);
-            await _service.AddAsync(entidade);
-            return RedirectToAction(nameof(Index));
+
+            try
+            {
+                await _service.AddAsync(entidade);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (ValidationException ex)
+            {
+                foreach (var err in ex.Errors)
+                    ModelState.AddModelError(err.PropertyName, err.ErrorMessage);
+            }
+            catch (InvalidOperationException ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+            }
+
+            PreencherDrops();
+            return View(vm);
         }
 
-        // GET: /Paciente/Edit/5
         public async Task<IActionResult> Edit(Guid id)
         {
             var ent = await _service.GetByIdAsync(id);
             if (ent is null) return NotFound();
+
+            PreencherDrops();
             return View(PacienteVM.FromEntity(ent));
         }
 
-        // POST: /Paciente/Edit/5
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, PacienteVM vm)
         {
             if (id != vm.Id) return BadRequest();
-            if (!ModelState.IsValid) return View(vm);
+            if (!ModelState.IsValid)
+            {
+                PreencherDrops();
+                return View(vm);
+            }
 
             var ent = await _service.GetByIdAsync(id);
             if (ent is null) return NotFound();
 
             vm.UpdateEntity(ent);
-            await _service.UpdateAsync(ent);
-            return RedirectToAction(nameof(Index));
+
+            try
+            {
+                await _service.UpdateAsync(ent);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (ValidationException ex)
+            {
+                foreach (var err in ex.Errors)
+                    ModelState.AddModelError(err.PropertyName, err.ErrorMessage);
+            }
+
+            PreencherDrops();
+            return View(vm);
         }
 
-        // GET: /Paciente/Delete/5
         public async Task<IActionResult> Delete(Guid id)
         {
             var ent = await _service.GetByIdAsync(id);
@@ -67,7 +121,6 @@ namespace Hospisim.Controllers
             return View(PacienteVM.FromEntity(ent));
         }
 
-        // POST: /Paciente/Delete/5
         [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {

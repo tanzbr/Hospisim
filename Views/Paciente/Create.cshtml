@@ -1,31 +1,84 @@
 ﻿@model Hospisim.Models.PacienteVM
 @{
-    ViewData["Title"] = "Novo Paciente";
+    ViewData["Title"] = "Paciente";
+    var sexos = (IEnumerable<SelectListItem>)ViewBag.Sexos;
+    var sangue = (IEnumerable<SelectListItem>)ViewBag.Sangues;
+    var civis = (IEnumerable<SelectListItem>)ViewBag.EstadosCivis;
 }
 
-<h2>Novo Paciente</h2>
+<h2>@ViewData["Title"]</h2>
+<hr />
 
-<form asp-action="Create" method="post">
+<form asp-action="Create" method="post" class="row g-3">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <div class="mb-3">
+    <div class="col-md-6">
         <label asp-for="NomeCompleto" class="form-label"></label>
         <input asp-for="NomeCompleto" class="form-control" />
         <span asp-validation-for="NomeCompleto" class="text-danger"></span>
     </div>
 
-    <div class="mb-3">
+    <div class="col-md-3">
         <label asp-for="CPF" class="form-label"></label>
         <input asp-for="CPF" class="form-control" />
         <span asp-validation-for="CPF" class="text-danger"></span>
     </div>
 
-    <div class="mb-3">
+    <div class="col-md-3">
         <label asp-for="DataNascimento" class="form-label"></label>
-        <input asp-for="DataNascimento" class="form-control" type="date" />
+        <input asp-for="DataNascimento" type="date" class="form-control" />
         <span asp-validation-for="DataNascimento" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Salvar</button>
-    <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+    <div class="col-md-3">
+        <label asp-for="Sexo" class="form-label"></label>
+        <select asp-for="Sexo" class="form-select" asp-items="sexos"></select>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="TipoSanguineo" class="form-label"></label>
+        <select asp-for="TipoSanguineo" class="form-select" asp-items="sangue"></select>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="EstadoCivil" class="form-label"></label>
+        <select asp-for="EstadoCivil" class="form-select" asp-items="civis">
+            <option value="">Selecione...</option>
+        </select>
+    </div>
+
+    <div class="col-md-3 form-check align-self-end">
+        <input asp-for="PossuiPlanoSaude" class="form-check-input" />
+        <label asp-for="PossuiPlanoSaude" class="form-check-label"></label>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Telefone" class="form-label"></label>
+        <input asp-for="Telefone" class="form-control" />
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-8">
+        <label asp-for="EnderecoCompleto" class="form-label"></label>
+        <input asp-for="EnderecoCompleto" class="form-control" />
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="NumeroCartaoSUS" class="form-label"></label>
+        <input asp-for="NumeroCartaoSUS" class="form-control" />
+    </div>
+
+    <div class="col-12 text-end">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
