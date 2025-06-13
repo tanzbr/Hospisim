@@ -1,0 +1,25 @@
+@model Hospisim.Domain.Entities.Prontuario
+@{
+    ViewData["Title"] = "Detalhes do Prontuário";
+}
+<div class="container mt-4">
+    <h2 class="mb-4"><i class="fas fa-notes-medical me-2"></i>Detalhes do Prontuário</h2>
+    <div class="card mb-4">
+        <div class="card-body">
+            <dl class="row mb-0">
+                <dt class="col-sm-3">Número</dt>
+                <dd class="col-sm-9">@Model.Numero</dd>
+                <dt class="col-sm-3">Data de Abertura</dt>
+                <dd class="col-sm-9">@Model.DataAbertura.ToString("dd/MM/yyyy")</dd>
+                <dt class="col-sm-3">Paciente</dt>
+                <dd class="col-sm-9">@Model.Paciente?.NomeCompleto</dd>
+                <dt class="col-sm-3">Observações Gerais</dt>
+                <dd class="col-sm-9">@Model.ObservacoesGerais</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between">
+        <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Voltar</a>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning"><i class="fas fa-edit"></i> Editar</a>
+    </div>
+</div> 

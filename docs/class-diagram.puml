@@ -1,0 +1,102 @@
+@startuml HOSPISIM - Diagrama de Classes
+
+title HOSPISIM - Diagrama de Classes Simplificado
+
+class Paciente {
+    + Id : Guid
+    + NomeCompleto : string
+    + CPF : string
+    + DataNascimento : DateTime
+    + Telefone : string
+    + Email : string
+    + PlanoSaude : string
+}
+
+class Prontuario {
+    + Id : Guid
+    + Numero : string
+    + DataCriacao : DateTime
+    + PacienteId : Guid
+}
+
+class Especialidade {
+    + Id : Guid
+    + Nome : string
+    + Descricao : string
+}
+
+class ProfissionalSaude {
+    + Id : Guid
+    + NomeCompleto : string
+    + RegistroProfissional : string
+    + Telefone : string
+    + Email : string
+    + Ativo : bool
+    + EspecialidadeId : Guid
+}
+
+class Atendimento {
+    + Id : Guid
+    + DataHora : DateTime
+    + Tipo : string
+    + Status : string
+    + Local : string
+    + PacienteId : Guid
+    + ProfissionalId : Guid
+    + ProntuarioId : Guid
+}
+
+class Internacao {
+    + Id : Guid
+    + DataEntrada : DateTime
+    + Setor : string
+    + Quarto : string
+    + Leito : string
+    + MotivoInternacao : string
+    + StatusInternacao : string
+    + PacienteId : Guid
+    + AtendimentoId : Guid
+}
+
+class AltaHospitalar {
+    + Id : Guid
+    + DataAlta : DateTime
+    + CondicaoPaciente : string
+    + InstrucoesPosAlta : string
+    + InternacaoId : Guid
+}
+
+class Prescricao {
+    + Id : Guid
+    + Medicamento : string
+    + Dosagem : string
+    + DataPrescricao : DateTime
+    + Status : string
+    + AtendimentoId : Guid
+    + ProfissionalId : Guid
+}
+
+class Exame {
+    + Id : Guid
+    + Tipo : string
+    + DataRealizacao : DateTime
+    + Resultado : string
+    + AtendimentoId : Guid
+}
+
+' Relacionamentos
+Paciente ||--o{ Prontuario
+Prontuario ||--o{ Atendimento
+Paciente ||--o{ Internacao
+
+Especialidade ||--o{ ProfissionalSaude
+ProfissionalSaude ||--o{ Atendimento
+ProfissionalSaude ||--o{ Prescricao
+
+Atendimento ||--o{ Prescricao
+Atendimento ||--o{ Exame
+Atendimento ||--o| Internacao
+
+Internacao ||--o| AltaHospitalar
+
+@enduml 

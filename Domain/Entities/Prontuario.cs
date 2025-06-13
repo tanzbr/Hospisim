@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Hospisim.Domain.Entities
 {
@@ -14,7 +15,10 @@ namespace Hospisim.Domain.Entities
         public string? ObservacoesGerais { get; set; }
 
         // — FK e navegação —
+        [Required]
         public Guid PacienteId { get; set; }
+        
+        [ValidateNever]
         public Paciente Paciente { get; set; } = default!;
 
         public ICollection<Atendimento> Atendimentos { get; set; } = new List<Atendimento>();

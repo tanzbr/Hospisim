@@ -25,7 +25,7 @@ namespace Hospisim.Data
             ctx.Especialidades.AddRange(especialidades);
 
             // ---------- auxiliares ----------
-            string GeraCpf(int i) => (10000000000 + i).ToString();               // 11 dígitos
+            string GeraCpf(int i) => (10000000000 + i).ToString(); // 11 dígitos
             string GeraEmail(string baseName, int i) => $"{baseName}{i}@exemplo.com";
             string GeraFone(int i) => $"(11)90000-00{i:00}";
             DateTime RandDate(int startYear) => new DateTime(startYear, 1, 1)

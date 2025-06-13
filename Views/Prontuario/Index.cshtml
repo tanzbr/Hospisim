@@ -1,0 +1,43 @@
+@model IEnumerable<Hospisim.Domain.Entities.Prontuario>
+@{
+    ViewData["Title"] = "Prontuários";
+}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><i class="fas fa-notes-medical me-2"></i>Prontuários</h2>
+        <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i> Novo Prontuário</a>
+    </div>
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Número</th>
+                    <th>Paciente</th>
+                    <th>Data de Abertura</th>
+                    <th>Observações</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Numero</td>
+                        <td>@item.Paciente?.NomeCompleto</td>
+                        <td>@item.DataAbertura.ToString("dd/MM/yyyy")</td>
+                        <td>@item.ObservacoesGerais</td>
+                        <td class="text-end">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm me-1" title="Detalhes"><i class="fas fa-eye"></i></a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm me-1" title="Editar"><i class="fas fa-edit"></i></a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm" title="Excluir"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div> 

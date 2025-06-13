@@ -1,0 +1,51 @@
+@model Hospisim.Domain.Entities.Prontuario
+@{
+    ViewData["Title"] = "Editar Prontuário";
+}
+<div class="container mt-4">
+    <h2 class="mb-4"><i class="fas fa-edit me-2"></i>Editar Prontuário</h2>
+    @if (!ViewData.ModelState.IsValid && ViewData.ModelState.Values.Any(v => v.Errors.Count > 0))
+    {
+        <div class="alert alert-danger">
+            <strong>Por favor, corrija os erros abaixo:</strong>
+            <ul class="mb-0">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+    <form asp-action="Edit" method="post" class="needs-validation" novalidate>
+        <input type="hidden" asp-for="Id" />
+        <div class="mb-3">
+            <label asp-for="Numero" class="form-label"></label>
+            <input asp-for="Numero" class="form-control" maxlength="20" required />
+            <span asp-validation-for="Numero" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="DataAbertura" class="form-label"></label>
+            <input asp-for="DataAbertura" class="form-control" type="date" required />
+            <span asp-validation-for="DataAbertura" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="ObservacoesGerais" class="form-label"></label>
+            <textarea asp-for="ObservacoesGerais" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="ObservacoesGerais" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="PacienteId" class="form-label"></label>
+            <select asp-for="PacienteId" class="form-select" asp-items="ViewBag.PacienteId" required>
+                <option value="">Selecione um paciente...</option>
+            </select>
+            <span asp-validation-for="PacienteId" class="text-danger"></span>
+        </div>
+        <div class="d-flex justify-content-between">
+            <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Voltar</a>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Salvar</button>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 
